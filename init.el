@@ -23,6 +23,22 @@
   (load custom-file))
 
 ;; ----------------------------
+;; straight.el bootstrap
+;; ----------------------------
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; ----------------------------
 ;; Packages
 ;; ----------------------------
 (setq package-enable-at-startup nil)
@@ -492,6 +508,15 @@
          ("C-c n i" . org-roam-node-insert))
   :config
   (org-roam-setup))
+
+(use-package appine
+  :straight (appine :type git :host github :repo "chaoswork/appine")
+  :defer t
+  :custom
+  (appine-use-for-org-links t)
+  :bind (("C-x a a" . appine)
+         ("C-x a u" . appine-open-url)
+         ("C-x a o" . appine-open-file)))
 
 (setq windmove-ignore-window-parameters t)
 (provide 'init)
