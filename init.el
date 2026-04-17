@@ -41,23 +41,8 @@
 ;; ----------------------------
 ;; Packages
 ;; ----------------------------
-(setq package-enable-at-startup nil)
-(require 'package)
-
-(setq package-archives
-      '(("gnu"   . "https://elpa.gnu.org/packages/")
-        ("nongnu". "https://elpa.nongnu.org/nongnu/")
-        ("melpa" . "https://melpa.org/packages/")))
-
-(package-initialize)
-
-;; Bootstrap use-package if needed
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
-;; Be explicit per package to avoid surprise installs during startup.
-(setq use-package-always-ensure nil)
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 ;; ----------------------------
 ;; Rust: prefer classic rust-mode (no Tree-sitter grammar maintenance)
