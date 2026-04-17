@@ -1,0 +1,34 @@
+# Compiled elisp
+*.elc
+*.eln
+eln-cache/
+
+# Package manager
+elpa/
+
+# Auto-generated runtime files
+auto-save-list/
+recentf
+places
+history
+tramp
+projects
+multisession/
+
+# Cache directories
+.cache/
+url/
+
+# Tree-sitter grammars (large binaries)
+tree-sitter/
+
+# Transient (magit, etc.)
+transient/
+
+# Backup files
+*~
+*.backup
+\#*\#
+
+# Custom — uncomment to track machine-local settings
+# custom.el
