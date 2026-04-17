@@ -61,22 +61,24 @@
   (interactive "sName for terminal: ")
   (vterm (concat "vterm-" name)))
 
-(defun my/vterm-agent (name dir)
-  "Create a named vterm in DIR and run 'agent'."
+(defun my/vterm-claude (name dir)
+  "Create a named vterm in DIR and run 'claude'."
   (interactive
    (list
     (read-string "Name for terminal: ")
     (read-directory-name "Directory: ")))
   (let ((default-directory dir))
     (vterm (concat "vterm-" name))
-    (vterm-send-string "agent")
+    (vterm-send-string "claude")
     (vterm-send-return)))
 
 (use-package vterm
   :ensure t
   :commands (vterm vterm-send-string vterm-send-return)
   :bind (("C-c t t" . my/vterm-new-named)
-         ("C-c t a" . my/vterm-agent)))
+         ("C-c t a" . my/vterm-claude))
+  :hook (vterm-copy-mode . (lambda ()
+                              (setq-local cursor-type (if vterm-copy-mode 'box nil)))))
 
 ;; ----------------------------
 ;; Theme (choose ONE)
@@ -116,6 +118,43 @@
 (when (executable-find "gls")
   (setq insert-directory-program "gls")
   (setq dired-listing-switches "-al --group-directories-first"))
+
+(use-package perspective
+  :ensure t
+  :custom
+  (persp-suppress-no-prefix-key-warning t)
+  :bind (:map persp-mode-map
+         ([remap next-buffer]     . my/persp-next-buffer)
+         ([remap previous-buffer] . my/persp-prev-buffer))
+  :config
+  (defun my/persp-cycle-buffer (direction)
+    (let* ((bufs (seq-filter #'buffer-live-p
+                             (seq-map #'get-buffer (persp-get-buffer-names))))
+           (idx  (seq-position bufs (current-buffer)))
+           (next (nth (mod (+ (or idx 0) direction) (length bufs)) bufs)))
+      (when next (switch-to-buffer next))))
+
+  (defun my/persp-next-buffer ()
+    (interactive)
+    (my/persp-cycle-buffer 1))
+
+  (defun my/persp-prev-buffer ()
+    (interactive)
+    (my/persp-cycle-buffer -1))
+
+  (defun my/persp-new-frame (frame)
+    (run-with-idle-timer
+     0 nil
+     (lambda ()
+       (with-selected-frame frame
+         (persp-switch
+          (cl-loop for i from 1
+                   for name = (format "frame-%d" i)
+                   unless (member name (persp-names))
+                   return name))))))
+  (add-hook 'after-make-frame-functions #'my/persp-new-frame)
+  :init
+  (persp-mode))
 
 (use-package orderless
   :ensure t

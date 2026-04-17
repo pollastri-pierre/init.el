@@ -10,7 +10,7 @@
 		      magit-delta markdown-mode markdown-preview-mode
 		      markdown-xwidget nerd-icons olivetti orderless
 		      org-appear org-cliplink org-sidebar
-		      org-superstar pdf-tools rust-mode
+		      org-superstar pdf-tools perspective rust-mode
 		      treemacs-projectile vertico vterm))
  '(scroll-bar-mode nil))
 (custom-set-faces
