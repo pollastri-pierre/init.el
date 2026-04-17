@@ -117,22 +117,6 @@
   (setq insert-directory-program "gls")
   (setq dired-listing-switches "-al --group-directories-first"))
 
-(use-package corfu
-  :ensure t
-  :init
-  (global-corfu-mode 1)
-  :custom
-  (corfu-auto t)
-  (corfu-cycle t)
-  (corfu-preselect 'prompt)
-  (corfu-quit-no-match 'separator))
-
-(use-package corfu-terminal
-  :ensure t
-  :after corfu
-  :config
-  (corfu-terminal-mode +1))
-
 (use-package orderless
   :ensure t
   :init
